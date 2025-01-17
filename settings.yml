@@ -1,0 +1,25 @@
+blocks:
+  default: >-
+    []
+  json_schema: >-
+    {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "html": {
+            "type": "string",
+            "description": "Custom HTML content for this block"
+          },
+          "tags": {
+            "type": "array",
+            "format": "table",
+            "uniqueItems": true,
+            "description": "Comma-separated list of tags for this block",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }

@@ -1,0 +1,7 @@
+{{! javascripts/discourse/connectors/topic-navigation/custom-blocks.hbs }}
+
+<div class="custom-topic-banner">
+  {{#each this.blocksToDisplay as |block|}}
+    {{html-safe block.content}}
+  {{/each}}
+</div>

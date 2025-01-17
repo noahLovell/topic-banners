@@ -1,0 +1,16 @@
+.custom-topic-banner {
+  display: none;
+}
+
+@media screen and (min-width: 925px) {
+  .custom-topic-banner {
+    width: 100%;
+    display: block;
+  }
+
+  .custom-topic-banner img {
+    max-width: 150px;
+    height: auto;
+    display: block;
+  }
+}

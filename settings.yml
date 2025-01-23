@@ -21,7 +21,8 @@ blocks:
             "description": "Comma-separated list of tags for this block",
             "items": {
               "type": "string"
-            },
+            }
+          },
           "placementID": {
             "type": "string",
             "description": "Placement ID for this block"
@@ -29,7 +30,6 @@ blocks:
           "campaignID": {
             "type": "string",
             "description": "Campaign ID for this block"
-          }
           }
         }
       }

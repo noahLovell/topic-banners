@@ -2,6 +2,6 @@
 
   {{#each this.blocksToDisplay as |block|}}
     <div class="custom-block" {{on "click" (fn this.handleBlockClick this.event block.placementID block.campaignID)}}>
-      {{{block.content}}}
+       {{html-safe block.content}}
     </div>
   {{/each}}

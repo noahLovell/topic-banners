@@ -1,3 +1,6 @@
+api_endpoint:
+  default: "https://api.example.com/endpoint"
+  client: true
 blocks:
   default: >-
     []
@@ -18,7 +21,15 @@ blocks:
             "description": "Comma-separated list of tags for this block",
             "items": {
               "type": "string"
-            }
+            },
+          "placementID": {
+            "type": "string",
+            "description": "Placement ID for this block"
+          },
+          "campaignID": {
+            "type": "string",
+            "description": "Campaign ID for this block"
+          }
           }
         }
       }

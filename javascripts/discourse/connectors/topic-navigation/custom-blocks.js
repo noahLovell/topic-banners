@@ -1,5 +1,8 @@
 import Component from "@glimmer/component";
 import { htmlSafe } from "@ember/template";
+import { action } from "@ember/object";
+import { getOwner } from "@ember/application";
+import { ajax } from "discourse/lib/ajax";
 
 export default class CustomBlocks extends Component {
   get blocksToDisplay() {
@@ -26,8 +29,57 @@ export default class CustomBlocks extends Component {
 
     return blocks
       .filter((block) => block.tags?.some((tag) => tags.includes(tag)))
-      .map((block) => ({
-        content: htmlSafe(block.html),
-      }));
+      .map((block) => {
+        return {
+          content: htmlSafe(block.html),
+          placementID: block.placementID,
+          campaignID: block.campaignID,
+        };
+      });
+  }
+
+
+@action
+  handleBlockClick(event, placementID, campaignID) {
+    event.preventDefault(); 
+
+    const apiEndpoint = settings.custom_api_endpoint;
+
+    if (!apiEndpoint) {
+      console.warn("API endpoint is not configured.");
+      return;
+    }
+
+    const payload = {
+      placementID,
+      campaignID
+    };
+
+    // Send the API data
+    ajax(apiEndpoint, {
+      method: "POST",
+      data: payload,
+      headers: {
+        "Content-Type": "application/json",
+        "origin": window.location.origin,
+        "referrer": document.referrer
+      },
+    })
+      .then((response) => {
+        console.log("Block data sent successfully:", response);
+
+        // After successful API call, navigate using Ember router
+        const href = event.target.getAttribute('href'); // Access href safely
+        if (href) {
+          const router = getOwner(this).lookup("router:main");
+          const url = new URL(href);
+          const path = url.pathname + url.search;
+          router.transitionTo(path);
+        }
+      })
+      .catch((error) => {
+        console.error("Error sending block data:", error);
+      });
   }
 }
+

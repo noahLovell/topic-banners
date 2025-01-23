@@ -1,14 +1,7 @@
 {{! javascripts/discourse/connectors/topic-navigation/custom-blocks.hbs }}
 
-<script type="text/x-handlebars" data-template-name="connectors/topic-after-main-content/custom-blocks">
   {{#each this.blocksToDisplay as |block|}}
-    <div class="custom-block">
-      <a
-        href="{{block.content}}"
-        {{on "click" (fn this.handleBlockClick block.placementID block.campaignID)}}
-      >
-        {{{block.content}}}
-      </a>
+    <div class="custom-block" {{on "click" (fn this.handleBlockClick block.content block.placementID block.campaignID)}}>
+      {{{block.content}}}
     </div>
   {{/each}}
-</script>

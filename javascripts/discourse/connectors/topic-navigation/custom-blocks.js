@@ -41,6 +41,7 @@ export default class CustomBlocks extends Component {
 
 @action
   handleBlockClick(event, placementID, campaignID) {
+    console.log("Event Object:", event); 
     event.preventDefault(); 
 
     const apiEndpoint = settings.custom_api_endpoint;

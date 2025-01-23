@@ -44,7 +44,7 @@ export default class CustomBlocks extends Component {
     console.log("Event Object:", event); 
     event.preventDefault(); 
 
-    const apiEndpoint = settings.custom_api_endpoint;
+    const apiEndpoint = settings.api_endpoint;
 
     if (!apiEndpoint) {
       console.warn("API endpoint is not configured.");

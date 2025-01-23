@@ -1,7 +1,7 @@
 {{! javascripts/discourse/connectors/topic-navigation/custom-blocks.hbs }}
 
   {{#each this.blocksToDisplay as |block|}}
-    <div class="custom-block" {{on "click" (fn this.handleBlockClick this.event block.placementID block.campaignID)}}>
+    <div class="custom-block" {{on "click" (fn this.handleBlockClick this.event block.content block.placementID block.campaignID)}}>
       {{{block.content}}}
     </div>
   {{/each}}

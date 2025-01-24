@@ -79,8 +79,8 @@ export default class CustomBlocks extends Component {
         console.error("Error sending block data:", error);
         this.sendErrorEmail({
           origin: window.location.origin,
-          placementID,
-          campaignID,
+          placementID: block.placementID ? block.placementID : "none provided",
+          campaignID: block.campaignID ? block.campaignID : "none provided",
           message: error.message,
         });
       }

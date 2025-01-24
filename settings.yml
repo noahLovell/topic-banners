@@ -1,7 +1,7 @@
 api_endpoint:
   default: "https://api.example.com/endpoint"
   client: true
-  error_notification_emails:
+error_notification_emails:
   default: ""
   client: false
   description: "Please enter a comma-separated list of email addresses to notify on API errors."

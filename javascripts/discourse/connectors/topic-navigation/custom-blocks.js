@@ -63,7 +63,6 @@ export default class CustomBlocks extends Component {
       data: payload,
       headers: {
         "Content-Type": "application/json",
-        "origin": window.location.origin,
         "referrer": document.referrer
       },
     })

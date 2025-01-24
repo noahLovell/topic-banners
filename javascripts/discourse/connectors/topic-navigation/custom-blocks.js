@@ -40,8 +40,9 @@ export default class CustomBlocks extends Component {
 
 
 @action
-  handleBlockClick(event, placementID, campaignID) {
+  handleBlockClick(event, block) {
     console.log("Event Object:", event); 
+    console.log("Block Object:", block); 
     event.preventDefault(); 
 
     const apiEndpoint = settings.api_endpoint;
@@ -52,8 +53,8 @@ export default class CustomBlocks extends Component {
     }
 
     const payload = {
-      placementID,
-      campaignID
+      placementID: block.placementID,
+      campaignID: block.campaignID
     };
 
     // Send the API data

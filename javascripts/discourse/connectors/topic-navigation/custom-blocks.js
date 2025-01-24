@@ -3,9 +3,11 @@ import { htmlSafe } from "@ember/template";
 import { action } from "@ember/object";
 import { getOwner } from "@ember/application";
 import { ajax } from "discourse/lib/ajax";
-import { sendEmail } from "discourse/lib/email";
+import { inject as service } from "@ember/service";
 
 export default class CustomBlocks extends Component {
+  @service siteSettings;
+
   get blocksToDisplay() {
     const tags = this.args.outletArgs?.topic?.tags || [];
     let blocks = [];
@@ -55,7 +57,6 @@ export default class CustomBlocks extends Component {
       campaignID: block.campaignID
     };
 
-    // Send the API data
     ajax(apiEndpoint, {
       method: "POST",
       data: payload,
@@ -76,30 +77,44 @@ export default class CustomBlocks extends Component {
       })
       .catch((error) => {
         console.error("Error sending block data:", error);
-        const emails = settings.error_notification_emails
-          ? settings.error_notification_emails.split(",").map((e) => e.trim())
-          : [];
+        this.sendErrorEmail({
+          origin: window.location.origin,
+          placementID,
+          campaignID,
+          message: error.message,
+        });
+      }
+    );
+  }
 
-        if (emails.length > 0) {
-          const emailBody = `
-            An error occurred during an API request:
-            
-            Error Message: ${error.message}
-            API Endpoint: ${apiEndpoint}
-            Origin: ${window.location.origin}
-            Referrer: ${document.referrer || "N/A"}
-            Placement ID: ${placementID || "N/A"}
-            Campaign ID: ${campaignID || "N/A"}
-          `;
-          emails.forEach((email) => {
-            sendEmail({
-              to: email,
-              subject: "Topic Banner Plugin API Error Occured",
-              body: emailBody,
-            });
-          });
-        }
-      });
+  sendErrorEmail({ origin, placementID, campaignID, message }) {
+    const emailAddresses = this.siteSettings.error_notification_emails || "";
+    const recipients = emailAddresses.split(",").map((email) => email.trim()).filter(Boolean);
+
+    if (recipients.length === 0) {
+      console.warn("No email recipients configured for error notifications.");
+      return;
+    }
+
+    recipients.forEach((email) => {
+      ajax("/admin/email", {
+        method: "POST",
+        data: {
+          to: email,
+          subject: "Topic Banners API Error",
+          body: `
+            An API error occurred.
+
+            **Error Details**:
+            Origin: ${origin}
+            Placement ID: ${placementID}
+            Campaign ID: ${campaignID}
+            Error Message: ${message}
+          `,
+        },
+      })
+        .then(() => console.log(`Error notification sent to ${email}`))
+        .catch((err) => console.error(`Failed to send email to ${email}:`, err));
+    });
   }
 }
-

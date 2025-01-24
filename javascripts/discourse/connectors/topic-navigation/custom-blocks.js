@@ -88,7 +88,7 @@ export default class CustomBlocks extends Component {
   }
 
   sendErrorEmail({ origin, placementID, campaignID, message }) {
-    const emailAddresses = this.siteSettings.error_notification_emails || "";
+    const emailAddresses = settings.error_notification_emails || "";
     const recipients = emailAddresses.split(",").map((email) => email.trim()).filter(Boolean);
 
     if (recipients.length === 0) {

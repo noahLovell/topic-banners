@@ -40,7 +40,7 @@ export default class CustomBlocks extends Component {
 
 
 @action
-  handleBlockClick(event, block) {
+  handleBlockClick(block, event) {
     console.log("Event Object:", event); 
     console.log("Block Object:", block); 
     event.preventDefault(); 

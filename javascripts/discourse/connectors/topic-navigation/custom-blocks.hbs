@@ -1,7 +1,7 @@
 {{! javascripts/discourse/connectors/topic-navigation/custom-blocks.hbs }}
 <div class="custom-topic-banner">
   {{#each this.blocksToDisplay as |block|}}
-    <div {{on "click" (this.handleBlockClick block)}}>
+    <div {{on "click" (fn this.handleBlockClick block)}}>
       {{html-safe block.content}}
     </div>
   {{/each}}

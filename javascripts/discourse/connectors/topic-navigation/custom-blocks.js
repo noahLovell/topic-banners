@@ -69,9 +69,7 @@ export default class CustomBlocks extends Component {
     })
       .then((response) => {
         console.log("Block data sent successfully:", response);
-
-        // After successful API call, navigate using Ember router
-        const href = event.target.getAttribute('href'); // Access href safely
+        const href = event.target.getAttribute('href'); 
         if (href) {
           const router = getOwner(this).lookup("router:main");
           const url = new URL(href);

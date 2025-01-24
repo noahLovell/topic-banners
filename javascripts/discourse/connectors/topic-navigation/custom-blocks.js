@@ -3,10 +3,8 @@ import { htmlSafe } from "@ember/template";
 import { action } from "@ember/object";
 import { getOwner } from "@ember/application";
 import { ajax } from "discourse/lib/ajax";
-import { inject as service } from "@ember/service";
 
 export default class CustomBlocks extends Component {
-  @service siteSettings;
 
   get blocksToDisplay() {
     const tags = this.args.outletArgs?.topic?.tags || [];
@@ -96,25 +94,19 @@ export default class CustomBlocks extends Component {
       return;
     }
 
-    recipients.forEach((email) => {
-      ajax("/admin/email", {
-        method: "POST",
-        data: {
-          to: email,
-          subject: "Topic Banners API Error",
-          body: `
-            An API error occurred.
+    const recipient = recipients[0]; // Use the first email address
+  const subject = encodeURIComponent("Topic Banners API Error");
+  const body = encodeURIComponent(`
+    An API error occurred.
 
-            **Error Details**:
-            Origin: ${origin}
-            Placement ID: ${placementID}
-            Campaign ID: ${campaignID}
-            Error Message: ${message}
-          `,
-        },
-      })
-        .then(() => console.log(`Error notification sent to ${email}`))
-        .catch((err) => console.error(`Failed to send email to ${email}:`, err));
-    });
+    **Error Details**:
+    Origin: ${origin}
+    Placement ID: ${placementID}
+    Campaign ID: ${campaignID}
+    Error Message: ${message}
+  `);
+
+  const mailtoLink = `mailto:${recipient}?subject=${subject}&body=${body}`;
+  window.location.href = mailtoLink;
   }
 }

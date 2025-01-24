@@ -4,7 +4,7 @@ api_endpoint:
 error_notification_emails:
   default: ""
   client: false
-  description: "Please enter a comma-separated list of email addresses to notify on API errors."
+  description: "Email address to notify of errors"
 blocks:
   default: >-
     []

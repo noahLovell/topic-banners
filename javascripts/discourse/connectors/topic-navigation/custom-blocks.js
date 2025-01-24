@@ -41,10 +41,7 @@ export default class CustomBlocks extends Component {
 
 @action
   handleBlockClick(block, event) {
-    console.log("Event Object:", event); 
-    console.log("Block Object:", block); 
-    event.preventDefault(); 
-
+     
     const apiEndpoint = settings.api_endpoint;
 
     if (!apiEndpoint) {

@@ -3,6 +3,7 @@ import { htmlSafe } from "@ember/template";
 import { action } from "@ember/object";
 import { getOwner } from "@ember/application";
 import { ajax } from "discourse/lib/ajax";
+import { sendEmail } from "discourse/lib/email";
 
 export default class CustomBlocks extends Component {
   get blocksToDisplay() {
@@ -75,6 +76,29 @@ export default class CustomBlocks extends Component {
       })
       .catch((error) => {
         console.error("Error sending block data:", error);
+        const emails = settings.error_notification_emails
+          ? settings.error_notification_emails.split(",").map((e) => e.trim())
+          : [];
+
+        if (emails.length > 0) {
+          const emailBody = `
+            An error occurred during an API request:
+            
+            Error Message: ${error.message}
+            API Endpoint: ${apiEndpoint}
+            Origin: ${window.location.origin}
+            Referrer: ${document.referrer || "N/A"}
+            Placement ID: ${placementID || "N/A"}
+            Campaign ID: ${campaignID || "N/A"}
+          `;
+          emails.forEach((email) => {
+            sendEmail({
+              to: email,
+              subject: "Topic Banner Plugin API Error Occured",
+              body: emailBody,
+            });
+          });
+        }
       });
   }
 }

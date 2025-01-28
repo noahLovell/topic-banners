@@ -113,7 +113,7 @@ export default class CustomBlocks extends Component {
         category: categoryID,
       },
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
         "Api-Key": apiKey,
         "Api-Username": apiUsername,
       },

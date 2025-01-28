@@ -75,11 +75,17 @@ export default class CustomBlocks extends Component {
       })
       .catch((error) => {
         console.error("Error sending block data:", error);
+        let errorMessage = "Unknown error occurred.";
+      if (error.responseJSON) {
+        errorMessage = error.responseJSON.message || JSON.stringify(error.responseJSON);
+      } else if (error.responseText) {
+        errorMessage = error.responseText;
+      }
         this.createErrorPost({
           origin: window.location.origin,
           placementID: block.placementID ? block.placementID : "none provided",
           campaignID: block.campaignID ? block.campaignID : "none provided",
-          message: error.message,
+          message: errorMessage,
         });
       }
     );

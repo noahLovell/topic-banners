@@ -77,7 +77,7 @@ export default class CustomBlocks extends Component {
         console.error("Error sending block data:", error);
         let errorMessage = "Unknown error occurred.";
       if (error.responseJSON) {
-        errorMessage = error.responseJSON.message || JSON.stringify(error.responseJSON);
+        errorMessage = error.jqXHR.responseJSON.error || JSON.stringify(error.responseJSON);
       } else if (error.responseText) {
         errorMessage = error.responseText;
       }

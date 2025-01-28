@@ -75,7 +75,7 @@ export default class CustomBlocks extends Component {
       })
       .catch((error) => {
         console.error("Error sending block data:", error);
-        this.sendErrorEmail({
+        this.createErrorPost({
           origin: window.location.origin,
           placementID: block.placementID ? block.placementID : "none provided",
           campaignID: block.campaignID ? block.campaignID : "none provided",
@@ -85,28 +85,44 @@ export default class CustomBlocks extends Component {
     );
   }
 
-  sendErrorEmail({ origin, placementID, campaignID, message }) {
-    const emailAddresses = settings.error_notification_emails || "";
-    const recipients = emailAddresses.split(",").map((email) => email.trim()).filter(Boolean);
-
-    if (recipients.length === 0) {
-      console.warn("No email recipients configured for error notifications.");
+  createErrorPost({ origin, placementID, campaignID, message }) {
+    const apiKey = settings.api_key;  
+    const apiUsername = "system"; 
+    const categoryID = settings.category_id; 
+    
+  
+    if (!apiKey || !categoryID) {
+      console.warn("API key or category ID is not configured.");
       return;
     }
-
-    const recipient = recipients[0]; // Use the first email address
-  const subject = encodeURIComponent("Topic Banners API Error");
-  const body = encodeURIComponent(`
-    An API error occurred.
-
-    **Error Details**:
-    Origin: ${origin}
-    Placement ID: ${placementID}
-    Campaign ID: ${campaignID}
-    Error Message: ${message}
-  `);
-
-  const mailtoLink = `mailto:${recipient}?subject=${subject}&body=${body}`;
-  window.location.href = mailtoLink;
+  
+    const topicTitle = `API Error Report: ${placementID || "Unknown Placement ID"}`;
+    const topicBody = `
+      **Error Details**:
+      - **Origin**: ${origin}
+      - **Placement ID**: ${placementID}
+      - **Campaign ID**: ${campaignID}
+      - **Error Message**: ${message}
+    `;
+  
+    ajax("/posts", {
+      method: "POST",
+      data: {
+        title: topicTitle,
+        raw: topicBody,
+        category: categoryID,
+        api_key: apiKey,
+        api_username: apiUsername,
+      },
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        console.log("Error notification topic created successfully:", response);
+      })
+      .catch((error) => {
+        console.error("Failed to create error notification topic:", error);
+      });
+    }
   }
-}

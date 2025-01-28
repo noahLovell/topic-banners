@@ -1,10 +1,14 @@
 api_endpoint:
   default: "https://api.example.com/endpoint"
   client: true
-error_notification_emails:
+api_key:
   default: ""
-  client: false
-  description: "Email address to notify of errors"
+  client: true
+  description: "Discourse API key for error reporting via topic creation"
+category_id:
+  default: 0
+  description: "Category ID for topic creation for error reporting"
+  client: true
 blocks:
   default: >-
     []

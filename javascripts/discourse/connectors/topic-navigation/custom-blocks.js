@@ -111,11 +111,11 @@ export default class CustomBlocks extends Component {
         title: topicTitle,
         raw: topicBody,
         category: categoryID,
-        api_key: apiKey,
-        api_username: apiUsername,
       },
       headers: {
         "Content-Type": "application/json",
+        "Api-Key": apiKey,
+        "Api-Username": apiUsername,
       },
     })
       .then((response) => {

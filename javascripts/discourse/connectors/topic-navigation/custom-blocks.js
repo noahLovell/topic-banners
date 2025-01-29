@@ -11,22 +11,14 @@ export default class CustomBlocks extends Component {
     let blocks = [];
 
     try {
-      // First parse the outer JSON structure
-      console.log("Settings:", settings);
-      console.log("Settings blocks:", settings.blocks);
       if (typeof settings.blocks === "string") {
-        // Parse the string (if JSON-encoded)
         blocks = JSON.parse(settings.blocks || "[]");
       } else if (Array.isArray(settings.blocks)) {
-        // Use directly if it's already an array/object
         blocks = settings.blocks;
       }
     } catch (e) {
       console.error("Error parsing theme settings for 'blocks':", e);
     }
-
-    console.log("Parsed blocks:", blocks);
-    console.log("Topic tags:", tags);
 
     return blocks
       .filter((block) => block.tags?.some((tag) => tags.includes(tag)))
@@ -64,7 +56,6 @@ export default class CustomBlocks extends Component {
       },
     })
       .then((response) => {
-        console.log("Block data sent successfully:", response);
         const href = event.target.getAttribute('href'); 
         if (href) {
           const router = getOwner(this).lookup("router:main");
@@ -74,7 +65,6 @@ export default class CustomBlocks extends Component {
         }
       })
       .catch((error) => {
-        console.error("Error sending block data:", error.jqXHR);
         let errorMessage = "Unknown error occurred.";
       if (error.jqXHR.responseJSON) {
         errorMessage = error.jqXHR.responseJSON.error || JSON.stringify(error.responseJSON);
@@ -125,7 +115,7 @@ export default class CustomBlocks extends Component {
       },
     })
       .then((response) => {
-        console.log("Error notification topic created successfully:", response);
+        
       })
       .catch((error) => {
         console.error("Failed to create error notification topic:", error);

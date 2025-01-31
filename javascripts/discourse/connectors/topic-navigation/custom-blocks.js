@@ -1,10 +1,11 @@
 import Component from "@glimmer/component";
 import { htmlSafe } from "@ember/template";
 import { action } from "@ember/object";
-import { getOwner } from "@ember/application";
 import { ajax } from "discourse/lib/ajax";
+import { inject as service } from "@ember/service";
 
 export default class CustomBlocks extends Component {
+  @service router;
 
   get blocksToDisplay() {
     const tags = this.args.outletArgs?.topic?.tags || [];
@@ -20,15 +21,17 @@ export default class CustomBlocks extends Component {
       console.error("Error parsing theme settings for 'blocks':", e);
     }
 
-    return blocks
-      .filter((block) => block.tags?.some((tag) => tags.includes(tag)))
-      .map((block) => {
-        return {
+    for (const block of blocks) {
+      if (block.tags?.some((tag) => tags.includes(tag))) {
+        return [{
           content: htmlSafe(block.html),
           placementID: block.placementID,
           campaignID: block.campaignID,
-        };
-      });
+        }];
+      }
+    }
+
+    return []; 
   }
 
 
@@ -58,10 +61,8 @@ export default class CustomBlocks extends Component {
       .then((response) => {
         const href = event.target.getAttribute('href'); 
         if (href) {
-          const router = getOwner(this).lookup("router:main");
           const url = new URL(href);
-          const path = url.pathname + url.search;
-          router.transitionTo(path);
+          this.router.transitionTo(url.pathname + url.search);
         }
       })
       .catch((error) => {

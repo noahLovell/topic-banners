@@ -1,10 +1,11 @@
 import Component from "@glimmer/component";
 import { htmlSafe } from "@ember/template";
 import { action } from "@ember/object";
-import { getOwner } from "@ember/application";
 import { ajax } from "discourse/lib/ajax";
+import { inject as service } from "@ember/service";
 
 export default class CustomBlocks extends Component {
+  @service router;
 
   get blocksToDisplay() {
     const tags = this.args.outletArgs?.topic?.tags || [];
@@ -60,10 +61,8 @@ export default class CustomBlocks extends Component {
       .then((response) => {
         const href = event.target.getAttribute('href'); 
         if (href) {
-          const router = getOwner(this).lookup("router:main");
           const url = new URL(href);
-          const path = url.pathname + url.search;
-          router.transitionTo(path);
+          this.router.transitionTo(url.pathname + url.search);
         }
       })
       .catch((error) => {

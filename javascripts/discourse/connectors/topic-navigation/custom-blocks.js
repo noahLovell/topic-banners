@@ -20,15 +20,17 @@ export default class CustomBlocks extends Component {
       console.error("Error parsing theme settings for 'blocks':", e);
     }
 
-    return blocks
-      .filter((block) => block.tags?.some((tag) => tags.includes(tag)))
-      .map((block) => {
-        return {
+    for (const block of blocks) {
+      if (block.tags?.some((tag) => tags.includes(tag))) {
+        return [{
           content: htmlSafe(block.html),
           placementID: block.placementID,
           campaignID: block.campaignID,
-        };
-      });
+        }];
+      }
+    }
+
+    return []; 
   }
 
 

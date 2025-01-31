@@ -1,3 +1,14 @@
+api_endpoint:
+  default: "https://api.example.com/endpoint"
+  client: true
+api_key:
+  default: ""
+  client: true
+  description: "Discourse API key for error reporting via topic creation"
+category_id:
+  default: 0
+  description: "Category ID for topic creation for error reporting"
+  client: true
 blocks:
   default: >-
     []
@@ -19,6 +30,14 @@ blocks:
             "items": {
               "type": "string"
             }
+          },
+          "placementID": {
+            "type": "string",
+            "description": "Placement ID for this block"
+          },
+          "campaignID": {
+            "type": "string",
+            "description": "Campaign ID for this block"
           }
         }
       }

@@ -1,8 +1,10 @@
 import Component from "@glimmer/component";
-import { htmlSafe } from "@ember/template";
 import { action } from "@ember/object";
 import { ajax } from "discourse/lib/ajax";
+import { on } from "@ember/modifier";
+import { fn } from "@ember/helper";
 import { inject as service } from "@ember/service";
+import htmlSafe from "discourse/helpers/html-safe";
 
 export default class CustomBlocks extends Component {
   @service router;
@@ -31,13 +33,13 @@ export default class CustomBlocks extends Component {
       }
     }
 
-    return []; 
+    return [];
   }
 
 
 @action
   handleBlockClick(block, event) {
-     
+
     const apiEndpoint = settings.api_endpoint;
 
     if (!apiEndpoint) {
@@ -59,7 +61,7 @@ export default class CustomBlocks extends Component {
       },
     })
       .then((response) => {
-        const href = event.target.getAttribute('href'); 
+        const href = event.target.getAttribute('href');
         if (href) {
           const url = new URL(href);
           this.router.transitionTo(url.pathname + url.search);
@@ -83,16 +85,16 @@ export default class CustomBlocks extends Component {
   }
 
   createErrorPost({ origin, placementID, campaignID, message }) {
-    const apiKey = settings.api_key;  
-    const apiUsername = "system"; 
-    const categoryID = settings.category_id; 
-    
-  
+    const apiKey = settings.api_key;
+    const apiUsername = "system";
+    const categoryID = settings.category_id;
+
+
     if (!apiKey || !categoryID) {
       console.warn("API key or category ID is not configured.");
       return;
     }
-  
+
     const topicTitle = `API Error Report: ${placementID || "Unknown Placement ID"}`;
     const topicBody = `
       **Error Details**:
@@ -101,7 +103,7 @@ export default class CustomBlocks extends Component {
       - **Campaign ID**: ${campaignID}
       - **Error Message**: ${message}
     `;
-  
+
     ajax("/posts", {
       method: "POST",
       data: {
@@ -116,10 +118,20 @@ export default class CustomBlocks extends Component {
       },
     })
       .then((response) => {
-        
+
       })
       .catch((error) => {
         console.error("Failed to create error notification topic:", error);
       });
-    }
   }
+
+  <template>
+    <div class="custom-topic-banner">
+      {{#each this.blocksToDisplay as |block|}}
+        <div {{on "click" (fn this.handleBlockClick block)}}>
+          {{htmlSafe block.content}}
+        </div>
+      {{/each}}
+    </div>
+  </template>
+}

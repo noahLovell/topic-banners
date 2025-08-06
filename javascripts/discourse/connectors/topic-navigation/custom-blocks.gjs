@@ -1,10 +1,10 @@
 import Component from "@glimmer/component";
-import { action } from "@ember/object";
-import { ajax } from "discourse/lib/ajax";
-import { on } from "@ember/modifier";
 import { fn } from "@ember/helper";
-import { inject as service } from "@ember/service";
+import { on } from "@ember/modifier";
+import { action } from "@ember/object";
+import { service } from "@ember/service";
 import htmlSafe from "discourse/helpers/html-safe";
+import { ajax } from "discourse/lib/ajax";
 
 export default class CustomBlocks extends Component {
   @service router;
